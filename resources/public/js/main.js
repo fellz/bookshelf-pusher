@@ -16812,11 +16812,13 @@ testpro.app.store_img = function(a, b) {
     var d = [cljs.core.str("https://s3.amazonaws.com/chater/"), cljs.core.str(a.key)].join("");
     return fetch.remotes.remote_callback.call(null, "store-image", cljs.core.PersistentVector.fromArray([d, b], !0), function() {
       jayq.core.inner.call(null, jayq.core.$.call(null, [cljs.core.str("#book-img-"), cljs.core.str(b)].join("")), [cljs.core.str("<img src='"), cljs.core.str(d), cljs.core.str("'>")].join(""));
+      jayq.core.hide.call(null, jayq.core.$.call(null, "#flash-message"));
       return jayq.core.hide.call(null, jayq.core.$.call(null, [cljs.core.str("#image-loader-"), cljs.core.str(b)].join("")))
     })
   })
 };
 testpro.app.convert_andstore_img = function(a, b) {
+  jayq.core.show.call(null, jayq.core.$.call(null, "#flash-message"));
   return filepicker.convert(a, jayq.util.clj__GT_js.call(null, cljs.core.ObjMap.fromObject(["\ufdd0'width", "\ufdd0'fit"], {"\ufdd0'width":80, "\ufdd0'fit":"scale"})), function(a) {
     return testpro.app.store_img.call(null, a, b)
   })
@@ -16829,6 +16831,20 @@ testpro.app.show_img_loader = function(a, b) {
   var c = jayq.core.attr.call(null, jayq.core.$.call(null, a), "\ufdd0'bookid");
   return jayq.core.toggle.call(null, jayq.core.$.call(null, [cljs.core.str("#image-loader-"), cljs.core.str(c)].join("")))
 };
+testpro.app.store_book = function(a) {
+  jayq.core.prevent.call(null, a);
+  var a = jayq.core.val.call(null, jayq.core.$.call(null, "\ufdd0'#author")), b = jayq.core.val.call(null, jayq.core.$.call(null, "\ufdd0'#title"));
+  return fetch.remotes.remote_callback.call(null, "store-book", cljs.core.PersistentVector.fromArray([a, b], !0), function() {
+    return fetch.remotes.remote_callback.call(null, "books-list-rem", cljs.core.PersistentVector.EMPTY, function(a) {
+      jayq.core.inner.call(null, jayq.core.$.call(null, "\ufdd0'#books-list"), a);
+      jayq.core.val.call(null, jayq.core.$.call(null, "\ufdd0'#author"), "");
+      return jayq.core.val.call(null, jayq.core.$.call(null, "\ufdd0'#title"), "")
+    })
+  })
+};
+jayq.core.on.call(null, jayq.core.$.call(null, "\ufdd0'body"), "\ufdd0'click", "\ufdd0'#add-book-btn", function(a) {
+  return testpro.app.store_book.call(null, a)
+});
 jayq.core.on.call(null, jayq.core.$.call(null, "\ufdd0'body"), "\ufdd0'click", "\ufdd0'.show-img-loader", function(a) {
   return testpro.app.show_img_loader.call(null, this, a)
 });

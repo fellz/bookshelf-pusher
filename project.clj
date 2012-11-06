@@ -1,7 +1,7 @@
 (defproject mywebapp "0.1.0-SNAPSHOT"
     :plugins [
              [lein-cljsbuild "0.2.8"]]
-  :cljsbuild {:builds [
+    :cljsbuild {:builds [
     {
       :source-path "src"
       :compiler {

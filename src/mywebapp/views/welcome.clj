@@ -4,22 +4,21 @@
         [noir.fetch.remotes])  
   (:require [mywebapp.views.common :as common]
             [noir.response :as response]
-            [mywebapp.models.books :as mbooks])
+            [mywebapp.models.books :as mbooks]
+            [monger.collection :as monger])
 
   (:import (org.bson.types ObjectId))
 )  
 
 ;Form to send title and author
 (defpartial add-book-form []
-     (form-to [:post "/book/new"]
-        [:ul  
-          [:li (text-field {:placeholder "title"} "title")]
-          [:li (text-field {:placeholder "author"} "author")]
-          [:li (submit-button "Submit")]]))
+          [:p (text-field {:placeholder "title" :id "title"} "title")]
+          [:p (text-field {:placeholder "author" :id "author"} "author")]
+          [:p (submit-button {:id "add-book-btn"} "Submit")])
   
 ;[Templae] Book box with title and author  
 (defpartial book-box [{:keys [ _id title author imgurl]}]
-  [:div.row
+  [:div.row 
     [:div.span2 {:id "img-box"} 
       [:p {:id (str "book-img-"_id)}
         (if imgurl [:img {:src imgurl}])]
@@ -28,7 +27,7 @@
         [:input {
           :bookid _id
           :type "filepicker-dragdrop" 
-          :data-fp-apikey "AZ-vVu5NwT22-bgz82uDtz" 
+          :data-fp-apikey "your filepicker API key"
           :data-fp-container "modal" 
           :data-fp-maxSize "1024000"
           :data-fp-mimetype "image/*"
@@ -54,18 +53,28 @@
 ;Main page 
 (defpage "/" []
          (common/layout
-           (books-list)
+           [:div#books-list 
+              (books-list)]
            [:hr]
            [:h3 "Add book"]
            (add-book-form)))
 
-; Send our data to dev db and redirect to main page
-(defpage [:post "/book/new" ] {:keys [title author]}
-  (mbooks/save-book title author)
-  (response/redirect "/")
-)
+
 
 (defremote store-image [url bid] 
   (mbooks/store-image url bid)
   "ok" ; Need to return something readble here - for example string
+  )
+
+;Save our data in db
+(defremote store-book [author title]
+  (if (monger/insert "books" 
+      {:_id (ObjectId.)
+      :title title
+      :author author 
+      })
+    "ok")
+  )
+(defremote books-list-rem []
+  (books-list)
   )

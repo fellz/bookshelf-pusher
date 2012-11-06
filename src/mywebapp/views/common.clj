@@ -6,6 +6,7 @@
             (html5
               [:head
                [:title "Bookshelf"]
+
                (include-css "/css/reset.css")
                (include-css "/css/bootstrap.css")
                (include-css "/css/app.css")]
@@ -18,6 +19,7 @@
                     [:img {:src "/img/ajax-loader.gif"}]]
                   ]
                 [:h1 "Bookshelf"]
+                [:hr]
                 content]
                 (include-js "/js/jquery.min.js")
                 (include-js "/js/filepicker.js")
