@@ -1,4 +1,4 @@
-# mywebapp
+# Bookshelf
 
 Clojure and ClojureScript web application. Using Noir, Monger, MongoHQ, MongoDB. 
 
@@ -11,6 +11,7 @@ lein deps
 lein run
 ```
 Edit your mongo uri to make app work.
+Also edit your S3 Amazon and filepicker credentials.
 
 ## License
 
