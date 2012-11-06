@@ -96,6 +96,5 @@
     "ok")
   )
 (defremote books-list-rem []
-  ;(books-list)
-  (response/redirect "/")
+  (books-list)
   )
