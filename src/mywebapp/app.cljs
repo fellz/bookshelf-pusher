@@ -7,16 +7,18 @@
 ) 
 
 
-(.setKey  js/filepicker "your filepicker API key")
+(.setKey  js/filepicker "AZ-vVu5NwT22-bgz82uDtz")
 ; Helper that stores img
 (defn store-img [fpfile bid]
    (.store js/filepicker 
     fpfile
     {:location 'S3'} 
     (fn[url]
-      (let [a (str "https://s3.amazonaws.com/" (.-key url))] ; Here is your S3 store
-        (remote (store-image a bid) [result] ; Store image url
-            (inner ($ (str "#book-img-" bid)) (str "<img src='" a "'>")) ; Update current picture 
+      (let [iurl (str "https://s3.amazonaws.com/chater/" (.-key url))] ; Here is your S3 store
+        (remote (store-image iurl bid) [result] ; Store image url
+            (if-not (= bid "") 
+              (inner ($ (str "#book-img-" bid)) (str "<img src='" iurl "'>")) ; Update current picture 
+              (attr ($ :#book-img) :book-img-url iurl ))
             (hide ($ "#flash-message")) ; End of flash message                           
             (hide ($ (str "#image-loader-" bid))) ; Hide image loader  
             )))))
@@ -51,17 +53,17 @@
   (prevent e)
   (let [author (val ($ :#author))
         title (val ($ :#title))
+        iurl (attr ($ :#book-img) :book-img-url)
     ]
-  (remote (store-book author title) [result]
-    (remote (books-list-rem)[result]
-      (inner ($ :#books-list) result)
+      (remote (store-book author title iurl) [result]
+       (remote (books-list-rem)[result]
+        (inner ($ :#books-list) result)))
       (val ($ :#author) "")
       (val ($ :#title) "")
-      )))
-)
+   ))
 
 
-; Here e is event object
+; Here e is event object !
 (on ($ :body) :click :#add-book-btn (fn[e](store-book e)))
 
 (on ($ :body) :click :.show-img-loader (fn[e](this-as bid (show-img-loader bid e))))

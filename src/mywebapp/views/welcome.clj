@@ -14,7 +14,36 @@
 (defpartial add-book-form []
           [:p (text-field {:placeholder "title" :id "title"} "title")]
           [:p (text-field {:placeholder "author" :id "author"} "author")]
-          [:p (submit-button {:id "add-book-btn"} "Submit")])
+          (hidden-field {:id "book-img" :book-img-url "none"} "")
+          (fp-handler)
+          [:br ]  
+          [:p (submit-button {:id "add-book-btn"} "Submit")]
+          [:br]
+          [:br ] )
+
+(defn fp-handler 
+  ([id]
+  [:input {
+          :type "filepicker-dragdrop" 
+          :data-fp-apikey "AZ-vVu5NwT22-bgz82uDtz" 
+          :data-fp-container "modal" 
+          :data-fp-maxSize "1024000"
+          :data-fp-mimetype "image/*"
+          :data-fp-services "BOX,COMPUTER,DROPBOX,FACEBOOK"
+          :id "img-input"
+          :onchange (str "testpro.app.getimage(event.fpfile,'" id "')")  }]) ; Note here _id need to be a string !
+  ([]
+    [:input {
+          :type "filepicker-dragdrop" 
+          :data-fp-apikey "AZ-vVu5NwT22-bgz82uDtz" 
+          :data-fp-container "modal" 
+          :data-fp-maxSize "1024000"
+          :data-fp-mimetype "image/*"
+          :data-fp-services "BOX,COMPUTER,DROPBOX,FACEBOOK"
+          :id "img-input"
+          :onchange (str "testpro.app.getimage(event.fpfile, '')")  }]) ; Note here _id need to be a string !
+    )
+
   
 ;[Templae] Book box with title and author  
 (defpartial book-box [{:keys [ _id title author imgurl]}]
@@ -23,18 +52,8 @@
       [:p {:id (str "book-img-"_id)}
         (if imgurl [:img {:src imgurl}])]
       [:a.show-img-loader {:href "#" :bookid _id} "upload pic"]
-      [:p  {:id (str "image-loader-" _id) :class "img-loader"} 
-        [:input {
-          :bookid _id
-          :type "filepicker-dragdrop" 
-          :data-fp-apikey "your filepicker API key"
-          :data-fp-container "modal" 
-          :data-fp-maxSize "1024000"
-          :data-fp-mimetype "image/*"
-          :data-fp-services "BOX,COMPUTER,DROPBOX,FACEBOOK"
-          :data-fp-bookId _id
-          :id "img-input"
-          :onchange (str "testpro.app.getimage(event.fpfile,'" _id "')")  }]] ; Note here _id need to be a string !
+      [:p  {:id (str "image-loader-" _id) :class "img-loader"}] 
+       (fp-handler _id)
       [:hr]    
     ]
     [:div.span6
@@ -67,14 +86,16 @@
   )
 
 ;Save our data in db
-(defremote store-book [author title]
+(defremote store-book [author title iurl]
   (if (monger/insert "books" 
       {:_id (ObjectId.)
       :title title
-      :author author 
+      :author author
+      :imgurl iurl 
       })
     "ok")
   )
 (defremote books-list-rem []
-  (books-list)
+  ;(books-list)
+  (response/redirect "/")
   )

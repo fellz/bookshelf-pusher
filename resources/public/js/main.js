@@ -16811,7 +16811,7 @@ testpro.app.store_img = function(a, b) {
   return filepicker.store(a, cljs.core.ObjMap.fromObject(["\ufdd0'location"], {"\ufdd0'location":"\ufdd1'S3'"}), function(a) {
     var d = [cljs.core.str("https://s3.amazonaws.com/chater/"), cljs.core.str(a.key)].join("");
     return fetch.remotes.remote_callback.call(null, "store-image", cljs.core.PersistentVector.fromArray([d, b], !0), function() {
-      jayq.core.inner.call(null, jayq.core.$.call(null, [cljs.core.str("#book-img-"), cljs.core.str(b)].join("")), [cljs.core.str("<img src='"), cljs.core.str(d), cljs.core.str("'>")].join(""));
+      cljs.core._EQ_.call(null, b, "") ? jayq.core.attr.call(null, jayq.core.$.call(null, "\ufdd0'#book-img"), "\ufdd0'book-img-url", d) : jayq.core.inner.call(null, jayq.core.$.call(null, [cljs.core.str("#book-img-"), cljs.core.str(b)].join("")), [cljs.core.str("<img src='"), cljs.core.str(d), cljs.core.str("'>")].join(""));
       jayq.core.hide.call(null, jayq.core.$.call(null, "#flash-message"));
       return jayq.core.hide.call(null, jayq.core.$.call(null, [cljs.core.str("#image-loader-"), cljs.core.str(b)].join("")))
     })
@@ -16833,14 +16833,14 @@ testpro.app.show_img_loader = function(a, b) {
 };
 testpro.app.store_book = function(a) {
   jayq.core.prevent.call(null, a);
-  var a = jayq.core.val.call(null, jayq.core.$.call(null, "\ufdd0'#author")), b = jayq.core.val.call(null, jayq.core.$.call(null, "\ufdd0'#title"));
-  return fetch.remotes.remote_callback.call(null, "store-book", cljs.core.PersistentVector.fromArray([a, b], !0), function() {
+  var a = jayq.core.val.call(null, jayq.core.$.call(null, "\ufdd0'#author")), b = jayq.core.val.call(null, jayq.core.$.call(null, "\ufdd0'#title")), c = jayq.core.attr.call(null, jayq.core.$.call(null, "\ufdd0'#book-img"), "\ufdd0'book-img-url");
+  fetch.remotes.remote_callback.call(null, "store-book", cljs.core.PersistentVector.fromArray([a, b, c], !0), function() {
     return fetch.remotes.remote_callback.call(null, "books-list-rem", cljs.core.PersistentVector.EMPTY, function(a) {
-      jayq.core.inner.call(null, jayq.core.$.call(null, "\ufdd0'#books-list"), a);
-      jayq.core.val.call(null, jayq.core.$.call(null, "\ufdd0'#author"), "");
-      return jayq.core.val.call(null, jayq.core.$.call(null, "\ufdd0'#title"), "")
+      return jayq.core.inner.call(null, jayq.core.$.call(null, "\ufdd0'#books-list"), a)
     })
-  })
+  });
+  jayq.core.val.call(null, jayq.core.$.call(null, "\ufdd0'#author"), "");
+  return jayq.core.val.call(null, jayq.core.$.call(null, "\ufdd0'#title"), "")
 };
 jayq.core.on.call(null, jayq.core.$.call(null, "\ufdd0'body"), "\ufdd0'click", "\ufdd0'#add-book-btn", function(a) {
   return testpro.app.store_book.call(null, a)
