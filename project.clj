@@ -17,5 +17,9 @@
                            [clj-time "0.4.4"]
                            [jayq "0.1.0-alpha3"]
                            [clj-http "0.5.5"]]
+            :production {:misc "configuration"
+               :mirrors {#"central|clojars"
+                       "http://s3pository.herokuapp.com/clojure"}}
+            :min-lein-version "2.0.0"
             :main mywebapp.server)
 
