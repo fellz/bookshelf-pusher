@@ -7,7 +7,7 @@
 ) 
 
 
-(.setKey  js/filepicker "your filepicker API key")
+(.setKey  js/filepicker "AZ-vVu5NwT22-bgz82uDtz")
 
 ; Helper that stores img
 (defn store-img [fpfile bid]
@@ -15,7 +15,7 @@
     fpfile
     {:location 'S3'} 
     (fn[url]
-      (let [iurl (str "https://s3.amazonaws.com/" (.-key url))] ; Here is your S3 store
+      (let [iurl (str "https://s3.amazonaws.com/chater/" (.-key url))] ; Here is your S3 store
          (if-not (= bid "") ; If we use initial upload then we define bid as "" if we change picture then we provide book id
             ; Change picture in the list
             (remote (store-image iurl bid) [result] ; Store image url
