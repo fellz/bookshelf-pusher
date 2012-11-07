@@ -16805,46 +16805,52 @@ fetch.remotes.remote_callback = function(a, b, c) {
     return c.call(null, cljs.reader.read_string.call(null, a))
   } : null)
 };
-var testpro = {app:{}};
+var mywebapp = {app:{}};
 filepicker.setKey("AZ-vVu5NwT22-bgz82uDtz");
-testpro.app.store_img = function(a, b) {
+mywebapp.app.store_img = function(a, b) {
   return filepicker.store(a, cljs.core.ObjMap.fromObject(["\ufdd0'location"], {"\ufdd0'location":"\ufdd1'S3'"}), function(a) {
     var d = [cljs.core.str("https://s3.amazonaws.com/chater/"), cljs.core.str(a.key)].join("");
-    return fetch.remotes.remote_callback.call(null, "store-image", cljs.core.PersistentVector.fromArray([d, b], !0), function() {
-      cljs.core._EQ_.call(null, b, "") ? jayq.core.attr.call(null, jayq.core.$.call(null, "\ufdd0'#book-img"), "\ufdd0'book-img-url", d) : jayq.core.inner.call(null, jayq.core.$.call(null, [cljs.core.str("#book-img-"), cljs.core.str(b)].join("")), [cljs.core.str("<img src='"), cljs.core.str(d), cljs.core.str("'>")].join(""));
-      jayq.core.hide.call(null, jayq.core.$.call(null, "#flash-message"));
-      return jayq.core.hide.call(null, jayq.core.$.call(null, [cljs.core.str("#image-loader-"), cljs.core.str(b)].join("")))
-    })
+    cljs.core._EQ_.call(null, b, "") ? (jayq.core.attr.call(null, jayq.core.$.call(null, "\ufdd0'#book-img"), "\ufdd0'book-img-url", d), jayq.core.inner.call(null, jayq.core.$.call(null, "#bimg"), [cljs.core.str("<img src='"), cljs.core.str(d), cljs.core.str("'>")].join(""))) : fetch.remotes.remote_callback.call(null, "store-image", cljs.core.PersistentVector.fromArray([d, b], !0), function() {
+      return jayq.core.inner.call(null, jayq.core.$.call(null, [cljs.core.str("#book-img-"), cljs.core.str(b)].join("")), [cljs.core.str("<img src='"), cljs.core.str(d), cljs.core.str("'>")].join(""))
+    });
+    return jayq.core.hide.call(null, jayq.core.$.call(null, "#flash-message"))
   })
 };
-testpro.app.convert_andstore_img = function(a, b) {
+mywebapp.app.convert_and_store_img = function(a, b) {
   jayq.core.show.call(null, jayq.core.$.call(null, "#flash-message"));
   return filepicker.convert(a, jayq.util.clj__GT_js.call(null, cljs.core.ObjMap.fromObject(["\ufdd0'width", "\ufdd0'fit"], {"\ufdd0'width":80, "\ufdd0'fit":"scale"})), function(a) {
-    return testpro.app.store_img.call(null, a, b)
+    return mywebapp.app.store_img.call(null, a, b)
   })
 };
-testpro.app.getimage = function(a, b) {
-  return testpro.app.convert_andstore_img.call(null, a, b)
+mywebapp.app.upload_img = function(a) {
+  jayq.core.prevent.call(null, a);
+  return filepicker.pick(function(a) {
+    return mywebapp.app.convert_and_store_img.call(null, a, "")
+  })
 };
-testpro.app.show_img_loader = function(a, b) {
+mywebapp.app.update_img = function(a, b) {
   jayq.core.prevent.call(null, b);
   var c = jayq.core.attr.call(null, jayq.core.$.call(null, a), "\ufdd0'bookid");
-  return jayq.core.toggle.call(null, jayq.core.$.call(null, [cljs.core.str("#image-loader-"), cljs.core.str(c)].join("")))
+  return filepicker.pick(function(a) {
+    return mywebapp.app.convert_and_store_img.call(null, a, c)
+  })
 };
-testpro.app.store_book = function(a) {
+mywebapp.app.store_book = function(a) {
   jayq.core.prevent.call(null, a);
   var a = jayq.core.val.call(null, jayq.core.$.call(null, "\ufdd0'#author")), b = jayq.core.val.call(null, jayq.core.$.call(null, "\ufdd0'#title")), c = jayq.core.attr.call(null, jayq.core.$.call(null, "\ufdd0'#book-img"), "\ufdd0'book-img-url");
-  fetch.remotes.remote_callback.call(null, "store-book", cljs.core.PersistentVector.fromArray([a, b, c], !0), function() {
-    return fetch.remotes.remote_callback.call(null, "books-list-rem", cljs.core.PersistentVector.EMPTY, function(a) {
-      return jayq.core.inner.call(null, jayq.core.$.call(null, "\ufdd0'#books-list"), a)
-    })
+  fetch.remotes.remote_callback.call(null, "store-book", cljs.core.PersistentVector.fromArray([a, b, c], !0), function(a) {
+    return jayq.core.inner.call(null, jayq.core.$.call(null, "\ufdd0'#books-list"), a)
   });
   jayq.core.val.call(null, jayq.core.$.call(null, "\ufdd0'#author"), "");
-  return jayq.core.val.call(null, jayq.core.$.call(null, "\ufdd0'#title"), "")
+  jayq.core.val.call(null, jayq.core.$.call(null, "\ufdd0'#title"), "");
+  return jayq.core.inner.call(null, jayq.core.$.call(null, "#bimg"), "")
 };
 jayq.core.on.call(null, jayq.core.$.call(null, "\ufdd0'body"), "\ufdd0'click", "\ufdd0'#add-book-btn", function(a) {
-  return testpro.app.store_book.call(null, a)
+  return mywebapp.app.store_book.call(null, a)
 });
 jayq.core.on.call(null, jayq.core.$.call(null, "\ufdd0'body"), "\ufdd0'click", "\ufdd0'.show-img-loader", function(a) {
-  return testpro.app.show_img_loader.call(null, this, a)
+  return mywebapp.app.update_img.call(null, this, a)
+});
+jayq.core.on.call(null, jayq.core.$.call(null, "\ufdd0'body"), "\ufdd0'click", "\ufdd0'#upload-img", function(a) {
+  return mywebapp.app.upload_img.call(null, a)
 });

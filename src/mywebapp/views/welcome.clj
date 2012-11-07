@@ -14,36 +14,12 @@
 (defpartial add-book-form []
           [:p (text-field {:placeholder "title" :id "title"} "title")]
           [:p (text-field {:placeholder "author" :id "author"} "author")]
-          (hidden-field {:id "book-img" :book-img-url "none"} "")
-          (fp-handler)
-          [:br ]  
+          (hidden-field {:id "book-img" :book-img-url "none"} "") ; This field needed for Submit it contains picture url
+          [:div#bimg ] ;Handler for picture that will be inserted here after succesful upload
+          [:p [:a#upload-img {:href "#"} "upload image"]] ; Link for picture uploading
           [:p (submit-button {:id "add-book-btn"} "Submit")]
           [:br]
           [:br ] )
-
-(defn fp-handler 
-  ([id]
-  [:input {
-          :type "filepicker-dragdrop" 
-          :data-fp-apikey "AZ-vVu5NwT22-bgz82uDtz" 
-          :data-fp-container "modal" 
-          :data-fp-maxSize "1024000"
-          :data-fp-mimetype "image/*"
-          :data-fp-services "BOX,COMPUTER,DROPBOX,FACEBOOK"
-          :id "img-input"
-          :onchange (str "testpro.app.getimage(event.fpfile,'" id "')")  }]) ; Note here _id need to be a string !
-  ([]
-    [:input {
-          :type "filepicker-dragdrop" 
-          :data-fp-apikey "AZ-vVu5NwT22-bgz82uDtz" 
-          :data-fp-container "modal" 
-          :data-fp-maxSize "1024000"
-          :data-fp-mimetype "image/*"
-          :data-fp-services "BOX,COMPUTER,DROPBOX,FACEBOOK"
-          :id "img-input"
-          :onchange (str "testpro.app.getimage(event.fpfile, '')")  }]) ; Note here _id need to be a string !
-    )
-
   
 ;[Templae] Book box with title and author  
 (defpartial book-box [{:keys [ _id title author imgurl]}]
@@ -51,9 +27,7 @@
     [:div.span2 {:id "img-box"} 
       [:p {:id (str "book-img-"_id)}
         (if imgurl [:img {:src imgurl}])]
-      [:a.show-img-loader {:href "#" :bookid _id} "upload pic"]
-      [:p  {:id (str "image-loader-" _id) :class "img-loader"}] 
-       (fp-handler _id)
+      [:a.show-img-loader {:href "#" :bookid _id} "change pic"]
       [:hr]    
     ]
     [:div.span6
@@ -88,13 +62,9 @@
 ;Save our data in db
 (defremote store-book [author title iurl]
   (if (monger/insert "books" 
-      {:_id (ObjectId.)
-      :title title
-      :author author
-      :imgurl iurl 
-      })
-    "ok")
-  )
-(defremote books-list-rem []
-  (books-list)
+        {:_id (ObjectId.)
+        :title title
+        :author author
+        :imgurl iurl })
+    (books-list))
   )
