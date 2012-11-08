@@ -11,7 +11,7 @@ lein deps
 lein run dev
 ```
 Edit your mongo uri to make app work.
-Also edit your S3 Amazon and filepicker credentials.
+Also edit your Pusher credentials.
 
 ## License
 
