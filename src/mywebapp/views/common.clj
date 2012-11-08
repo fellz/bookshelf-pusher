@@ -23,5 +23,6 @@
                 content]
                 (include-js "/js/jquery.min.js")
                 (include-js "/js/filepicker.js")
+                (include-js "/js/pusher.min.js")
                 (include-js "/js/main.js")
                 ]))

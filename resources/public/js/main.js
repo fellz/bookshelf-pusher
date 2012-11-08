@@ -16806,51 +16806,25 @@ fetch.remotes.remote_callback = function(a, b, c) {
   } : null)
 };
 var mywebapp = {app:{}};
-filepicker.setKey("AZ-vVu5NwT22-bgz82uDtz");
-mywebapp.app.store_img = function(a, b) {
-  return filepicker.store(a, cljs.core.ObjMap.fromObject(["\ufdd0'location"], {"\ufdd0'location":"\ufdd1'S3'"}), function(a) {
-    var d = [cljs.core.str("https://s3.amazonaws.com/chater/"), cljs.core.str(a.key)].join("");
-    cljs.core._EQ_.call(null, b, "") ? (jayq.core.attr.call(null, jayq.core.$.call(null, "\ufdd0'#book-img"), "\ufdd0'book-img-url", d), jayq.core.inner.call(null, jayq.core.$.call(null, "#bimg"), [cljs.core.str("<img src='"), cljs.core.str(d), cljs.core.str("'>")].join(""))) : fetch.remotes.remote_callback.call(null, "store-image", cljs.core.PersistentVector.fromArray([d, b], !0), function() {
-      return jayq.core.inner.call(null, jayq.core.$.call(null, [cljs.core.str("#book-img-"), cljs.core.str(b)].join("")), [cljs.core.str("<img src='"), cljs.core.str(d), cljs.core.str("'>")].join(""))
-    });
-    return jayq.core.hide.call(null, jayq.core.$.call(null, "#flash-message"))
+mywebapp.app.pusher = new Pusher("you pusher API key");
+mywebapp.app.channel = mywebapp.app.pusher.subscribe("test_channel");
+mywebapp.app.callbk = function(a) {
+  return fetch.remotes.remote_callback.call(null, "last-book-rem", cljs.core.PersistentVector.fromArray([a.message], !0), function(a) {
+    return jayq.core.prepend.call(null, jayq.core.$.call(null, "#books-list"), a)
   })
 };
-mywebapp.app.convert_and_store_img = function(a, b) {
-  jayq.core.show.call(null, jayq.core.$.call(null, "#flash-message"));
-  return filepicker.convert(a, jayq.util.clj__GT_js.call(null, cljs.core.ObjMap.fromObject(["\ufdd0'width", "\ufdd0'fit"], {"\ufdd0'width":80, "\ufdd0'fit":"scale"})), function(a) {
-    return mywebapp.app.store_img.call(null, a, b)
-  })
-};
-mywebapp.app.upload_img = function(a) {
-  jayq.core.prevent.call(null, a);
-  return filepicker.pick(function(a) {
-    return mywebapp.app.convert_and_store_img.call(null, a, "")
-  })
-};
-mywebapp.app.update_img = function(a, b) {
-  jayq.core.prevent.call(null, b);
-  var c = jayq.core.attr.call(null, jayq.core.$.call(null, a), "\ufdd0'bookid");
-  return filepicker.pick(function(a) {
-    return mywebapp.app.convert_and_store_img.call(null, a, c)
-  })
-};
+mywebapp.app.channel.bind("my_event", function(a) {
+  return mywebapp.app.callbk.call(null, a)
+});
 mywebapp.app.store_book = function(a) {
   jayq.core.prevent.call(null, a);
-  var a = jayq.core.val.call(null, jayq.core.$.call(null, "\ufdd0'#author")), b = jayq.core.val.call(null, jayq.core.$.call(null, "\ufdd0'#title")), c = jayq.core.attr.call(null, jayq.core.$.call(null, "\ufdd0'#book-img"), "\ufdd0'book-img-url");
-  fetch.remotes.remote_callback.call(null, "store-book", cljs.core.PersistentVector.fromArray([a, b, c], !0), function(a) {
-    return jayq.core.inner.call(null, jayq.core.$.call(null, "\ufdd0'#books-list"), a)
+  var a = jayq.core.val.call(null, jayq.core.$.call(null, "\ufdd0'#author")), b = jayq.core.val.call(null, jayq.core.$.call(null, "\ufdd0'#title"));
+  fetch.remotes.remote_callback.call(null, "store-book", cljs.core.PersistentVector.fromArray([a, b], !0), function() {
+    return null
   });
   jayq.core.val.call(null, jayq.core.$.call(null, "\ufdd0'#author"), "");
-  jayq.core.val.call(null, jayq.core.$.call(null, "\ufdd0'#title"), "");
-  return jayq.core.inner.call(null, jayq.core.$.call(null, "#bimg"), "")
+  return jayq.core.val.call(null, jayq.core.$.call(null, "\ufdd0'#title"), "")
 };
 jayq.core.on.call(null, jayq.core.$.call(null, "\ufdd0'body"), "\ufdd0'click", "\ufdd0'#add-book-btn", function(a) {
   return mywebapp.app.store_book.call(null, a)
-});
-jayq.core.on.call(null, jayq.core.$.call(null, "\ufdd0'body"), "\ufdd0'click", "\ufdd0'.show-img-loader", function(a) {
-  return mywebapp.app.update_img.call(null, this, a)
-});
-jayq.core.on.call(null, jayq.core.$.call(null, "\ufdd0'body"), "\ufdd0'click", "\ufdd0'#upload-img", function(a) {
-  return mywebapp.app.upload_img.call(null, a)
 });

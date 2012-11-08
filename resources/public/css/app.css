@@ -1,6 +1,10 @@
+body{
+  background: url("/img/stressed_linen.png");
+}
 ul{
 list-style-type:none;
 }
+h1{color:gray;}
 .img-loader {
   display: none;
 }
@@ -20,4 +24,7 @@ list-style-type:none;
 }
 .lbl{
   color:gray;
+}
+.lbla{
+  color:#919191;
 }

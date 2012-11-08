@@ -16,7 +16,9 @@
                            [fetch "0.1.0-alpha2"]
                            [clj-time "0.4.4"]
                            [jayq "0.1.0-alpha3"]
-                           [clj-http "0.5.5"]]
+                           [clj-http "0.5.5"]
+                           [clj-pusher "0.3.0"]]
+                           
             :production {:misc "configuration"
                :mirrors {#"central|clojars"
                        "http://s3pository.herokuapp.com/clojure"}}

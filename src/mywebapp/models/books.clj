@@ -20,3 +20,7 @@
     :author author 
     })
   )
+
+(defn last-book [id]
+ (monger/find-one-as-map "books" {:_id (ObjectId. id)})
+  )
